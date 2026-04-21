@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { decrement, increment, incrementByAmount } from './counter.slice'
 
 const App = () => {
   const count = useSelector((state) => state.counter.value);
   const dispatch = useDispatch();
+
+  const [incrementBy, setIncrementBy] = useState(0);
 
   return (
     <div>
@@ -23,11 +25,17 @@ const App = () => {
           Decrement
         </button>
       </div>
+      <input 
+      type="number" 
+      name="incrementBy" 
+      id="incrementBy" 
+      onChange={(e) => setIncrementBy(Number(e.target.value))}
+      />
       <button
         aria-label="Increment value by 5"
-        onClick={() => dispatch(incrementByAmount(5))}
+        onClick={() => dispatch(incrementByAmount(incrementBy))}
       >
-        Increment by 5 
+        Increment by {incrementBy} 
       </button>
     </div>
   )
