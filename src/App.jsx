@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PhotoCard from './components/PhotoCard';
 import { setError, setLoading, setPhotos, setQuery } from './search.slice';
 import { fetchPhotos } from './unsplash.api';
+import { ToastContainer, Zoom, toast } from 'react-toastify';
 
 const App = () => {
 
@@ -9,11 +10,24 @@ const App = () => {
 
   const dispatch = useDispatch();
 
+  const successToast = () => toast.success(`${query} photos fetched!!!`, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    transition: Zoom,
+  });
+
 
   const handleSearch = async () => {
     try {
       dispatch(setLoading());
       dispatch(setPhotos(await fetchPhotos(query)));
+      successToast();
     } catch (err) {
       console.error("Error fetching photos:", err);
       dispatch(setError(err));
@@ -55,6 +69,19 @@ const App = () => {
       ) : (
         <div className='empty'>No photos yet. Try searching!</div>
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Zoom}
+      />
     </main>
   )
 }
